@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_editor/src/controller.dart';
 import 'package:video_editor/src/models/file_format.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+/*import 'package:video_thumbnail/video_thumbnail.dart';*/
 
 class FFmpegVideoEditorExecute {
   const FFmpegVideoEditorExecute({
@@ -100,8 +100,7 @@ abstract class FFmpegVideoEditorConfig {
     required String filePath,
     required FileFormat format,
   }) async {
-    final String tempPath =
-        outputDirectory ?? (await getTemporaryDirectory()).path;
+    final String tempPath = outputDirectory ?? (await getTemporaryDirectory()).path;
     final String n = name ?? path.basenameWithoutExtension(filePath);
     final int epoch = DateTime.now().millisecondsSinceEpoch;
     return "$tempPath/${n}_$epoch.${format.extension}";
@@ -115,8 +114,7 @@ abstract class FFmpegVideoEditorConfig {
   /// ```
   /// Returns the [double] progress value between 0.0 and 1.0.
   double getFFmpegProgress(int time) {
-    final double progressValue =
-        time / controller.trimmedDuration.inMilliseconds;
+    final double progressValue = time / controller.trimmedDuration.inMilliseconds;
     return progressValue.clamp(0.0, 1.0);
   }
 
@@ -159,8 +157,7 @@ class VideoFFmpegVideoEditorConfig extends FFmpegVideoEditorConfig {
 
   /// Returns the FFmpeg command to make the generated GIF to loop infinitely
   /// [see FFmpeg doc](https://ffmpeg.org/ffmpeg-formats.html#gif-2)
-  String get gifCmd =>
-      format.extension == VideoExportFormat.gif.extension ? "-loop 0" : "";
+  String get gifCmd => format.extension == VideoExportFormat.gif.extension ? "-loop 0" : "";
 
   /// Returns the list of all the active filters, including the GIF filter
   @override
@@ -168,8 +165,7 @@ class VideoFFmpegVideoEditorConfig extends FFmpegVideoEditorConfig {
     final List<String> filters = super.getExportFilters();
     final bool isGif = format.extension == VideoExportFormat.gif.extension;
     if (isGif) {
-      filters.add(
-          'fps=${format is GifExportFormat ? (format as GifExportFormat).fps : VideoExportFormat.gif.fps}');
+      filters.add('fps=${format is GifExportFormat ? (format as GifExportFormat).fps : VideoExportFormat.gif.fps}');
     }
     return filters;
   }
@@ -179,8 +175,7 @@ class VideoFFmpegVideoEditorConfig extends FFmpegVideoEditorConfig {
   @override
   Future<FFmpegVideoEditorExecute> getExecuteConfig() async {
     final String videoPath = controller.file.path;
-    final String outputPath =
-        await getOutputPath(filePath: videoPath, format: format);
+    final String outputPath = await getOutputPath(filePath: videoPath, format: format);
     final List<String> filters = getExportFilters();
 
     return FFmpegVideoEditorExecute(
@@ -226,14 +221,16 @@ class CoverFFmpegVideoEditorConfig extends FFmpegVideoEditorConfig {
   /// Generate this selected cover image as a JPEG [File]
   ///
   /// If this controller's [selectedCoverVal] is `null`, then it return the first frame of this video.
-  Future<String?> _generateCoverFile() async => VideoThumbnail.thumbnailFile(
+  Future<String?>
+      _generateCoverFile() async => /*VideoThumbnail.thumbnailFile(
         imageFormat: ImageFormat.JPEG,
         thumbnailPath: (await getTemporaryDirectory()).path,
         video: controller.file.path,
         timeMs: controller.selectedCoverVal?.timeMs ??
             controller.startTrim.inMilliseconds,
         quality: quality,
-      );
+      )*/
+          null;
 
   /// Returns a [FFmpegVideoEditorExecute] command to be executed with FFmpeg to export
   /// the cover image applying the editing parameters.
@@ -245,8 +242,7 @@ class CoverFFmpegVideoEditorConfig extends FFmpegVideoEditorConfig {
       debugPrint('VideoThumbnail library error while exporting the cover');
       return null;
     }
-    final String outputPath =
-        await getOutputPath(filePath: coverPath, format: format);
+    final String outputPath = await getOutputPath(filePath: coverPath, format: format);
     final List<String> filters = getExportFilters();
 
     return FFmpegVideoEditorExecute(

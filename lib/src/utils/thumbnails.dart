@@ -3,13 +3,13 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:video_editor/src/controller.dart';
 import 'package:video_editor/src/models/cover_data.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+/*import 'package:video_thumbnail/video_thumbnail.dart';*/
 
 Stream<List<Uint8List>> generateTrimThumbnails(
   VideoEditorController controller, {
   required int quantity,
 }) async* {
-  final String path = controller.file.path;
+  /*final String path = controller.file.path;
   final double eachPart = controller.videoDuration.inMilliseconds / quantity;
   List<Uint8List> byteList = [];
 
@@ -29,14 +29,14 @@ Stream<List<Uint8List>> generateTrimThumbnails(
     }
 
     yield byteList;
-  }
+  }*/
 }
 
 Stream<List<CoverData>> generateCoverThumbnails(
   VideoEditorController controller, {
   required int quantity,
 }) async* {
-  final int duration = controller.isTrimmed
+  /*final int duration = controller.isTrimmed
       ? controller.trimmedDuration.inMilliseconds
       : controller.videoDuration.inMilliseconds;
   final double eachPart = duration / quantity;
@@ -61,7 +61,7 @@ Stream<List<CoverData>> generateCoverThumbnails(
     }
 
     yield byteList;
-  }
+  }*/
 }
 
 /// Generate a cover at [timeMs] in video
@@ -72,12 +72,12 @@ Future<CoverData> generateSingleCoverThumbnail(
   int timeMs = 0,
   int quality = 10,
 }) async {
-  final Uint8List? thumbData = await VideoThumbnail.thumbnailData(
+  /*final Uint8List? thumbData = await VideoThumbnail.thumbnailData(
     imageFormat: ImageFormat.JPEG,
     video: filePath,
     timeMs: timeMs,
     quality: quality,
   );
-
-  return CoverData(thumbData: thumbData, timeMs: timeMs);
+*/
+  return CoverData(thumbData: null, timeMs: timeMs);
 }
